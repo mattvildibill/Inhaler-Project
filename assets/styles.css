@@ -200,6 +200,52 @@
       color: var(--muted);
     }
 
+    .tablist {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .tab {
+      border: 1px solid var(--border);
+      background: #f7faf8;
+      color: var(--muted);
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
+    }
+
+    .tab[aria-selected="true"] {
+      color: var(--text);
+      border-color: rgba(27, 124, 106, 0.45);
+      background: rgba(27, 124, 106, 0.12);
+      box-shadow: 0 6px 16px rgba(27, 124, 106, 0.12);
+    }
+
+    .tab:focus-visible {
+      outline: 3px solid rgba(27, 124, 106, 0.35);
+      outline-offset: 2px;
+    }
+
+    .tab-panel {
+      animation: panelFade 220ms ease;
+    }
+
+    @keyframes panelFade {
+      from {
+        opacity: 0;
+        transform: translateY(6px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
     .grid {
       display: grid;
       grid-template-columns: repeat(12, 1fr);
@@ -322,6 +368,46 @@
       color: var(--accent-2);
     }
 
+    .methodology {
+      display: grid;
+      gap: 14px;
+    }
+
+    .method-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    @media (max-width: 760px) {
+      .method-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .info-card {
+      padding: 16px;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background: #fbfdfc;
+    }
+
+    .info-card h3 {
+      margin: 0 0 8px;
+      font-size: 1rem;
+    }
+
+    .formula {
+      margin: 10px 0;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px dashed rgba(27, 124, 106, 0.4);
+      background: rgba(27, 124, 106, 0.08);
+      font-family: "Fraunces", "Times New Roman", serif;
+      font-size: 1rem;
+      color: var(--text);
+    }
+
     .footer {
       padding: 8px 18px 32px;
       max-width: 1020px;
@@ -336,6 +422,15 @@
       color: var(--accent);
     }
 
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
     @media (prefers-reduced-motion: reduce) {
       main > .card {
         animation: none;
@@ -343,6 +438,10 @@
 
       .toggle {
         transform: none;
+      }
+
+      .tab-panel {
+        animation: none;
       }
     }
   

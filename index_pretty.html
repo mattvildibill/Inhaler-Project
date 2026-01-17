@@ -13,7 +13,7 @@
       <h1>Inhaler Greenhouse Gas (GHG) Comparison Tool</h1>
       <p>
         Select an inhaler to view estimated climate impact and lower-GHG alternatives.
-        Replace placeholder numbers with your preferred data sources.
+        Values shown use the PrescQIPP v2.38 data table (UK) and can be replaced with your local sources.
       </p>
     </div>
   </header>
@@ -38,47 +38,91 @@
     </section>
 
     <section class="card" id="detailsCard" hidden>
-      <div class="grid">
-        <div class="col-12 title-row">
-          <h2 id="title"></h2>
-          <div class="subtitle" id="subtitle"></div>
-          <div class="pillrow" id="tags"></div>
-        </div>
+      <div class="tablist" role="tablist" aria-label="Inhaler detail tabs">
+        <button class="tab" type="button" role="tab" id="tab-details" aria-controls="panel-details" aria-selected="true" data-tab="details">Inhaler details</button>
+        <button class="tab" type="button" role="tab" id="tab-methodology" aria-controls="panel-methodology" aria-selected="false" data-tab="methodology">How values are calculated</button>
+      </div>
 
-        <div class="col-6">
-          <div class="metric">
-            <div class="k">Estimated CO&#8322;e per inhaler (lifecycle)</div>
-            <div class="v" id="co2ePerInhaler">—</div>
+      <div class="tab-panel" id="panel-details" role="tabpanel" aria-labelledby="tab-details" data-panel="details">
+        <div class="grid">
+          <div class="col-12 title-row">
+            <h2 id="title"></h2>
+            <div class="subtitle" id="subtitle"></div>
+            <div class="pillrow" id="tags"></div>
+          </div>
+
+          <div class="col-6">
+            <div class="metric">
+              <div class="k">Estimated CO&#8322;e per inhaler (lifecycle)</div>
+              <div class="v" id="co2ePerInhaler">—</div>
+            </div>
+          </div>
+
+          <div class="col-6">
+            <div class="metric">
+              <div class="k">Estimated CO&#8322;e per dose</div>
+              <div class="v" id="co2ePerDose">—</div>
+            </div>
+          </div>
+
+          <div class="col-12">
+            <div class="metric">
+              <div class="k">Notes (assumptions, propellant, etc.)</div>
+              <div class="small" id="notes">—</div>
+            </div>
+          </div>
+
+          <div class="col-12">
+            <div class="metric">
+              <div class="k">Lower-GHG alternatives (similar therapeutic intent)</div>
+              <ul id="alternatives"></ul>
+              <div class="small muted" id="altFootnote"></div>
+            </div>
+          </div>
+
+          <div class="col-12">
+            <div class="small">
+              <strong>Important:</strong> Clinical appropriateness comes first. Switching devices can affect
+              technique, inspiratory flow requirements, adherence, and outcomes. Consider shared decision-making,
+              training, and formulary access.
+            </div>
           </div>
         </div>
+      </div>
 
-        <div class="col-6">
-          <div class="metric">
-            <div class="k">Estimated CO&#8322;e per dose</div>
-            <div class="v" id="co2ePerDose">—</div>
+      <div class="tab-panel" id="panel-methodology" role="tabpanel" aria-labelledby="tab-methodology" data-panel="methodology" hidden>
+        <div class="methodology">
+          <div class="method-grid">
+            <div class="info-card">
+              <h3>Data source</h3>
+              <p class="small">
+                Values are drawn from the PrescQIPP Inhaler carbon footprint data table v2.38 (UK), which reports
+                indicative gCO&#8322;e per inhaler alongside doses per inhaler and device attributes.
+              </p>
+              <p class="small">
+                <a href="https://www.prescqipp.info/media/l1fjjonb/attachment-1-inhaler-carbon-footprint-data-table-v238.xlsx">Data table</a>
+                · <a href="https://www.prescqipp.info/our-resources/bulletins/bulletin-375-inhaler-carbon-footprint/">Bulletin overview</a>
+              </p>
+            </div>
+            <div class="info-card">
+              <h3>How values are derived</h3>
+              <div class="formula">gCO&#8322;e per dose = (gCO&#8322;e per inhaler) ÷ (doses per inhaler)</div>
+              <p class="small">We convert gCO&#8322;e per inhaler to kg CO&#8322;e in the UI for readability.</p>
+            </div>
           </div>
-        </div>
-
-        <div class="col-12">
-          <div class="metric">
-            <div class="k">Notes (assumptions, propellant, etc.)</div>
-            <div class="small" id="notes">—</div>
+          <div class="info-card">
+            <h3>Impact band</h3>
+            <p class="small">
+              The PrescQIPP table flags inhalers as low when ≤ 1796 gCO&#8322;e per inhaler and high when
+              &gt; 1796 gCO&#8322;e per inhaler. This tool uses the same threshold.
+            </p>
           </div>
-        </div>
-
-        <div class="col-12">
-          <div class="metric">
-            <div class="k">Lower-GHG alternatives (similar therapeutic intent)</div>
-            <ul id="alternatives"></ul>
-            <div class="small muted" id="altFootnote"></div>
-          </div>
-        </div>
-
-        <div class="col-12">
-          <div class="small">
-            <strong>Important:</strong> Clinical appropriateness comes first. Switching devices can affect
-            technique, inspiratory flow requirements, adherence, and outcomes. Consider shared decision-making,
-            training, and formulary access.
+          <div class="info-card">
+            <h3>Important caveats</h3>
+            <p class="small">
+              Values are indicative and UK-specific; device variants, propellant changes, and local formularies
+              may differ. Use these estimates to support discussions, not to override clinical appropriateness.
+            </p>
           </div>
         </div>
       </div>
@@ -86,8 +130,9 @@
 
     <section class="card">
       <div class="small">
-        <strong>How to update data:</strong> In the script at the bottom, edit the <code>INHALERS</code> array.
-        Use consistent units (e.g., kg CO&#8322;e per inhaler; g CO&#8322;e per dose). Add citations in <code>sources</code>.
+        <strong>How to update data:</strong> In <code>assets/app.js</code>, edit <code>INHALERS</code>,
+        <code>SOURCES_PRESCQIPP</code>, and <code>NOTE_SUFFIX</code>. Use consistent units (kg CO&#8322;e per inhaler;
+        g CO&#8322;e per dose) and update citations in <code>sources</code>.
       </div>
     </section>
   </main>

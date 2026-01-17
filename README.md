@@ -1,6 +1,6 @@
 # Inhaler GHG Comparison Tool
 
-A static, single-page tool for comparing inhaler greenhouse gas impact and suggesting lower-GHG alternatives. Update the dataset in `assets/app.js` to match your sources and local formulary.
+A static, single-page tool for comparing inhaler greenhouse gas impact and suggesting lower-GHG alternatives. The current dataset is populated from PrescQIPP v2.38 (UK) and can be replaced with your local sources.
 
 ## Project Structure
 
@@ -17,6 +17,7 @@ A static, single-page tool for comparing inhaler greenhouse gas impact and sugge
 - `index_pretty.html` mirrors the same UI (kept as a convenience copy).
 - `assets/styles.css` contains all styling.
 - `assets/app.js` contains the dataset and rendering logic.
+- The UI includes a second tab explaining data sources and calculation logic.
 
 ## Local Preview
 
@@ -40,10 +41,12 @@ Tip: The first deploy can take a minute or two after saving.
 
 ## Data Updates
 
-Edit the `INHALERS` array in `assets/app.js`:
-- Replace placeholders for CO2e values.
-- Add or remove alternatives.
-- Provide citations in the `sources` array.
+Edit the data in `assets/app.js`:
+- Update `INHALERS`, `SOURCES_PRESCQIPP`, and `NOTE_SUFFIX` if you use a different dataset.
+- Keep units consistent (kg CO2e per inhaler; g CO2e per dose).
+- Provide citations in each entry's `sources` array.
+
+The methodology tab in the UI explains how values are derived (per-dose values are calculated by dividing gCO2e per inhaler by doses per inhaler) and how impact bands are assigned.
 
 ## Fonts
 

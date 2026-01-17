@@ -387,6 +387,7 @@
     ];
 
     const INHALER_MAP = new Map(INHALERS.map((item) => [item.id, item]));
+    const SORTED_INHALERS = [...INHALERS].sort((a, b) => a.name.localeCompare(b.name));
 
     const dom = {
       select: document.querySelector("#inhalerSelect"),
@@ -399,7 +400,9 @@
       co2ePerDose: document.querySelector("#co2ePerDose"),
       notes: document.querySelector("#notes"),
       alternatives: document.querySelector("#alternatives"),
-      altFootnote: document.querySelector("#altFootnote")
+      altFootnote: document.querySelector("#altFootnote"),
+      tabs: Array.from(document.querySelectorAll("[data-tab]")),
+      panels: Array.from(document.querySelectorAll("[data-panel]"))
     };
 
     function bandToBadge(band) {
@@ -427,7 +430,7 @@
       const lowOnly = dom.lowOnly.checked;
       const current = dom.select.value;
 
-      const options = INHALERS
+      const options = SORTED_INHALERS
         .filter((item) => !lowOnly || item.impactBand === "low")
         .map((item) => ({ id: item.id, label: item.name }));
 
@@ -494,29 +497,37 @@
       dom.notes.textContent = inhaler.notes || "—";
 
       const altFragment = document.createDocumentFragment();
-      (inhaler.alternatives || []).forEach((alt) => {
+      const alternatives = inhaler.alternatives || [];
+      if (!alternatives.length) {
         const li = document.createElement("li");
-        const name = document.createElement("strong");
-        name.textContent = alt.name || "Alternative";
-        li.appendChild(name);
-
-        if (alt.why) {
-          li.appendChild(document.createTextNode(" — "));
-          const why = document.createElement("span");
-          why.className = "muted";
-          why.textContent = alt.why;
-          li.appendChild(why);
-        }
-
-        if (alt.estComparison) {
-          const detail = document.createElement("div");
-          detail.className = "small muted";
-          detail.textContent = `GHG comparison: ${alt.estComparison}`;
-          li.appendChild(detail);
-        }
-
+        li.className = "muted";
+        li.textContent = "No lower-GHG alternatives listed for this entry.";
         altFragment.appendChild(li);
-      });
+      } else {
+        alternatives.forEach((alt) => {
+          const li = document.createElement("li");
+          const name = document.createElement("strong");
+          name.textContent = alt.name || "Alternative";
+          li.appendChild(name);
+
+          if (alt.why) {
+            li.appendChild(document.createTextNode(" — "));
+            const why = document.createElement("span");
+            why.className = "muted";
+            why.textContent = alt.why;
+            li.appendChild(why);
+          }
+
+          if (alt.estComparison) {
+            const detail = document.createElement("div");
+            detail.className = "small muted";
+            detail.textContent = `GHG comparison: ${alt.estComparison}`;
+            li.appendChild(detail);
+          }
+
+          altFragment.appendChild(li);
+        });
+      }
 
       dom.alternatives.replaceChildren(altFragment);
 
@@ -535,8 +546,28 @@
       }
     }
 
+    function setActiveTab(name) {
+      dom.tabs.forEach((tab) => {
+        const isActive = tab.dataset.tab === name;
+        tab.setAttribute("aria-selected", String(isActive));
+        tab.setAttribute("tabindex", isActive ? "0" : "-1");
+      });
+
+      dom.panels.forEach((panel) => {
+        panel.hidden = panel.dataset.panel !== name;
+      });
+    }
+
     function init() {
       updateView();
+      if (dom.tabs.length) {
+        const defaultTab = dom.tabs.find((tab) => tab.getAttribute("aria-selected") === "true")?.dataset.tab
+          || dom.tabs[0].dataset.tab;
+        setActiveTab(defaultTab);
+        dom.tabs.forEach((tab) => {
+          tab.addEventListener("click", () => setActiveTab(tab.dataset.tab));
+        });
+      }
       dom.lowOnly.addEventListener("change", updateView);
       dom.select.addEventListener("change", (event) => {
         renderDetails(event.target.value);
