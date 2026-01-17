@@ -1,77 +1,388 @@
     /**
-     * Replace PLACEHOLDER values with your preferred dataset.
-     * Recommended fields:
-     * - name, deviceType, class, propellant, dosesPerInhaler
-     * - co2ePerInhalerKg (kg CO2e per inhaler), co2ePerDoseG (g CO2e per dose)
-     * - impactBand: "low" | "medium" | "high" (used for badge color)
-     * - alternatives: array of { name, why, estComparison }
-     * - sources: array of short citations or URLs (optional)
+     * Data source: PrescQIPP inhaler carbon footprint data table v2.38 (UK).
+     * Values below use the indicative gCO2e per inhaler from the source and
+     * compute gCO2e per dose by dividing by doses per inhaler.
      */
+    const SOURCES_PRESCQIPP = [
+      "PrescQIPP Inhaler carbon footprint data table v2.38 (UK)",
+      "https://www.prescqipp.info/media/l1fjjonb/attachment-1-inhaler-carbon-footprint-data-table-v238.xlsx",
+      "https://www.prescqipp.info/our-resources/bulletins/bulletin-375-inhaler-carbon-footprint/"
+    ];
+
+    const NOTE_SUFFIX = "Indicative carbon footprint per inhaler from PrescQIPP v2.38 (UK); per-dose value derived from gCO2e per inhaler and doses per inhaler.";
+
     const INHALERS = [
       {
-        id: "albuterol_mdi_hfa_placeholder",
-        name: "Albuterol (SABA) — MDI (HFA) [placeholder]",
-        deviceType: "MDI",
+        id: "ventolin_evohaler_100_micrograms",
+        name: "Ventolin Evohaler 100 micrograms",
+        deviceType: "pMDI",
         drugClass: "SABA",
-        propellant: "HFA (placeholder)",
+        propellant: "HFA-134a",
         dosesPerInhaler: 200,
-        co2ePerInhalerKg: 0,
-        co2ePerDoseG: 0,
+        co2ePerInhalerKg: 25.74,
+        co2ePerDoseG: 128.7,
         impactBand: "high",
-        notes: "Placeholder entry. Replace CO\u2082e estimates and propellant details based on your selected source and local product list.",
+        notes: "Indication: Asthma and reversible airways obstruction. Active ingredient(s): salbutamol 100 micrograms/puff. " + NOTE_SUFFIX,
         alternatives: [
           {
-            name: "Albuterol — DPI (if available)",
-            why: "No propellant; typically lower device-related emissions.",
-            estComparison: "Often lower than MDI (fill with numbers)."
+            name: "Ventolin Accuhaler 200 micrograms (DPI)",
+            why: "Same SABA class without propellant.",
+            estComparison: "0.58 kg CO2e/inhaler vs 25.74 kg CO2e/inhaler (PrescQIPP v2.38)."
           },
           {
-            name: "SMI option (where applicable)",
-            why: "Propellant-free mist device; may reduce GHG vs MDI.",
-            estComparison: "Often lower than MDI (fill with numbers)."
+            name: "Easyhaler Salbutamol 100 micrograms (DPI)",
+            why: "Propellant-free SABA DPI option.",
+            estComparison: "0.53 kg CO2e/inhaler vs 25.74 kg CO2e/inhaler (PrescQIPP v2.38)."
           }
         ],
-        sources: ["Add your citation(s) here"]
+        sources: SOURCES_PRESCQIPP
       },
       {
-        id: "ics_laba_dpi_placeholder",
-        name: "ICS/LABA — DPI [placeholder]",
+        id: "ventolin_accuhaler_200_micrograms",
+        name: "Ventolin Accuhaler 200 micrograms",
+        deviceType: "DPI",
+        drugClass: "SABA",
+        propellant: "None",
+        dosesPerInhaler: 60,
+        co2ePerInhalerKg: 0.583,
+        co2ePerDoseG: 9.72,
+        impactBand: "low",
+        notes: "Indication: Asthma and reversible airways obstruction. Active ingredient(s): salbutamol 200 micrograms/puff. " + NOTE_SUFFIX,
+        alternatives: [
+          {
+            name: "Easyhaler Salbutamol 100 micrograms (DPI)",
+            why: "Another low-GHG SABA DPI option.",
+            estComparison: "0.53 kg CO2e/inhaler vs 0.58 kg CO2e/inhaler (PrescQIPP v2.38)."
+          }
+        ],
+        sources: SOURCES_PRESCQIPP
+      },
+      {
+        id: "easyhaler_salbutamol_100_micrograms",
+        name: "Easyhaler Salbutamol 100 micrograms",
+        deviceType: "DPI",
+        drugClass: "SABA",
+        propellant: "None",
+        dosesPerInhaler: 200,
+        co2ePerInhalerKg: 0.533,
+        co2ePerDoseG: 2.66,
+        impactBand: "low",
+        notes: "Indication: Asthma and reversible airways obstruction. Active ingredient(s): salbutamol 100 micrograms/puff. " + NOTE_SUFFIX,
+        alternatives: [],
+        sources: SOURCES_PRESCQIPP
+      },
+      {
+        id: "atrovent_20_micrograms",
+        name: "Atrovent 20 micrograms",
+        deviceType: "pMDI",
+        drugClass: "SAMA",
+        propellant: "HFA-134a",
+        dosesPerInhaler: 200,
+        co2ePerInhalerKg: 17.632,
+        co2ePerDoseG: 88.16,
+        impactBand: "high",
+        notes: "Indication: Asthma and COPD. Active ingredient(s): ipratropium bromide 20 micrograms/puff. " + NOTE_SUFFIX,
+        alternatives: [],
+        sources: SOURCES_PRESCQIPP
+      },
+      {
+        id: "serevent_evohaler_25_micrograms",
+        name: "Serevent Evohaler 25 micrograms",
+        deviceType: "pMDI",
+        drugClass: "LABA",
+        propellant: "HFA-134a",
+        dosesPerInhaler: 120,
+        co2ePerInhalerKg: 17.16,
+        co2ePerDoseG: 143.0,
+        impactBand: "high",
+        notes: "Indication: Asthma and COPD. Active ingredient(s): salmeterol (as xinafoate) 25 micrograms/puff. " + NOTE_SUFFIX,
+        alternatives: [
+          {
+            name: "Serevent Accuhaler 50 micrograms (DPI)",
+            why: "Same LABA class without propellant.",
+            estComparison: "0.73 kg CO2e/inhaler vs 17.16 kg CO2e/inhaler (PrescQIPP v2.38)."
+          }
+        ],
+        sources: SOURCES_PRESCQIPP
+      },
+      {
+        id: "serevent_accuhaler_50_micrograms",
+        name: "Serevent Accuhaler 50 micrograms",
+        deviceType: "DPI",
+        drugClass: "LABA",
+        propellant: "None",
+        dosesPerInhaler: 60,
+        co2ePerInhalerKg: 0.732,
+        co2ePerDoseG: 12.2,
+        impactBand: "low",
+        notes: "Indication: Asthma and COPD. Active ingredient(s): salmeterol (as xinafoate) 50 micrograms/inhalation. " + NOTE_SUFFIX,
+        alternatives: [],
+        sources: SOURCES_PRESCQIPP
+      },
+      {
+        id: "clenil_modulite_100_micrograms",
+        name: "Clenil Modulite 100 micrograms",
+        deviceType: "pMDI",
+        drugClass: "ICS",
+        propellant: "HFA-134a",
+        dosesPerInhaler: 200,
+        co2ePerInhalerKg: 17.346,
+        co2ePerDoseG: 86.73,
+        impactBand: "high",
+        notes: "Indication: Asthma. Active ingredient(s): beclometasone dipropionate 100 micrograms/puff. " + NOTE_SUFFIX,
+        alternatives: [
+          {
+            name: "Pulmicort Turbohaler 200 micrograms (DPI)",
+            why: "Propellant-free ICS option in the same class.",
+            estComparison: "1.40 kg CO2e/inhaler vs 17.35 kg CO2e/inhaler (PrescQIPP v2.38)."
+          }
+        ],
+        sources: SOURCES_PRESCQIPP
+      },
+      {
+        id: "pulmicort_turbohaler_200_micrograms",
+        name: "Pulmicort Turbohaler 200 micrograms",
+        deviceType: "DPI",
+        drugClass: "ICS",
+        propellant: "None",
+        dosesPerInhaler: 100,
+        co2ePerInhalerKg: 1.4,
+        co2ePerDoseG: 14.0,
+        impactBand: "low",
+        notes: "Indication: Asthma. Active ingredient(s): budesonide 200 micrograms/inhalation. " + NOTE_SUFFIX,
+        alternatives: [],
+        sources: SOURCES_PRESCQIPP
+      },
+      {
+        id: "seretide_evohaler_25_125_micrograms",
+        name: "Seretide Evohaler 25/125 micrograms",
+        deviceType: "pMDI",
+        drugClass: "ICS/LABA",
+        propellant: "HFA-134a",
+        dosesPerInhaler: 120,
+        co2ePerInhalerKg: 17.16,
+        co2ePerDoseG: 143.0,
+        impactBand: "high",
+        notes: "Indication: Asthma. Active ingredient(s): fluticasone propionate 125 micrograms and salmeterol 25 micrograms/puff. " + NOTE_SUFFIX,
+        alternatives: [
+          {
+            name: "Seretide Accuhaler 50/250 micrograms (DPI)",
+            why: "Same class without propellant.",
+            estComparison: "0.90 kg CO2e/inhaler vs 17.16 kg CO2e/inhaler (PrescQIPP v2.38)."
+          },
+          {
+            name: "Fostair Nexthaler 100/6 micrograms (DPI)",
+            why: "Another low-GHG ICS/LABA DPI option.",
+            estComparison: "0.89 kg CO2e/inhaler vs 17.16 kg CO2e/inhaler (PrescQIPP v2.38)."
+          }
+        ],
+        sources: SOURCES_PRESCQIPP
+      },
+      {
+        id: "seretide_accuhaler_50_250_micrograms",
+        name: "Seretide Accuhaler 50/250 micrograms",
         deviceType: "DPI",
         drugClass: "ICS/LABA",
         propellant: "None",
         dosesPerInhaler: 60,
-        co2ePerInhalerKg: 0,
-        co2ePerDoseG: 0,
+        co2ePerInhalerKg: 0.898,
+        co2ePerDoseG: 14.97,
         impactBand: "low",
-        notes: "Dry powder inhalers (DPIs) are typically propellant-free; lifecycle emissions depend on manufacturing and distribution.",
+        notes: "Indication: Asthma. Active ingredient(s): fluticasone propionate 250 micrograms and salmeterol 50 micrograms/puff. " + NOTE_SUFFIX,
         alternatives: [
           {
-            name: "Other DPI within class",
-            why: "Switch within DPI category to align with formulary/cost while maintaining lower GHG.",
-            estComparison: "Comparable (fill with numbers)."
+            name: "Fostair Nexthaler 100/6 micrograms (DPI)",
+            why: "Comparable low-GHG ICS/LABA DPI option.",
+            estComparison: "0.89 kg CO2e/inhaler vs 0.90 kg CO2e/inhaler (PrescQIPP v2.38)."
           }
         ],
-        sources: ["Add your citation(s) here"]
+        sources: SOURCES_PRESCQIPP
       },
       {
-        id: "laba_lama_smi_placeholder",
-        name: "LAMA/LABA — SMI [placeholder]",
-        deviceType: "SMI",
-        drugClass: "LAMA/LABA",
-        propellant: "None",
-        dosesPerInhaler: 60,
-        co2ePerInhalerKg: 0,
-        co2ePerDoseG: 0,
-        impactBand: "low",
-        notes: "Soft mist inhalers (SMIs) are propellant-free; ensure patient can use device properly and has coverage.",
+        id: "fostair_100_6_micrograms",
+        name: "Fostair 100/6 micrograms",
+        deviceType: "pMDI",
+        drugClass: "ICS/LABA",
+        propellant: "HFA-134a",
+        dosesPerInhaler: 120,
+        co2ePerInhalerKg: 11.65,
+        co2ePerDoseG: 97.09,
+        impactBand: "high",
+        notes: "Indication: Asthma and COPD. Active ingredient(s): beclometasone dipropionate 100 micrograms and formoterol fumarate dihydrate 6 micrograms/puff. " + NOTE_SUFFIX,
         alternatives: [
           {
-            name: "DPI LAMA/LABA option",
-            why: "Propellant-free alternative; consider inspiratory flow needs.",
-            estComparison: "Comparable or lower (fill with numbers)."
+            name: "Fostair Nexthaler 100/6 micrograms (DPI)",
+            why: "Same active ingredients without propellant.",
+            estComparison: "0.89 kg CO2e/inhaler vs 11.65 kg CO2e/inhaler (PrescQIPP v2.38)."
           }
         ],
-        sources: ["Add your citation(s) here"]
+        sources: SOURCES_PRESCQIPP
+      },
+      {
+        id: "fostair_nexthaler_100_6_micrograms",
+        name: "Fostair Nexthaler 100/6 micrograms",
+        deviceType: "DPI",
+        drugClass: "ICS/LABA",
+        propellant: "None",
+        dosesPerInhaler: 120,
+        co2ePerInhalerKg: 0.889,
+        co2ePerDoseG: 7.41,
+        impactBand: "low",
+        notes: "Indication: Asthma and COPD. Active ingredient(s): beclometasone dipropionate 100 micrograms and formoterol fumarate dihydrate 6 micrograms/puff. " + NOTE_SUFFIX,
+        alternatives: [],
+        sources: SOURCES_PRESCQIPP
+      },
+      {
+        id: "spiriva_respimat_2_5_micrograms_inhalation_solution_plus_respimat_device",
+        name: "Spiriva Respimat 2.5 micrograms, inhalation solution plus Respimat device",
+        deviceType: "SMI",
+        drugClass: "LAMA",
+        propellant: "None",
+        dosesPerInhaler: 60,
+        co2ePerInhalerKg: 0.775,
+        co2ePerDoseG: 12.92,
+        impactBand: "low",
+        notes: "Indication: Asthma and COPD. Active ingredient(s): tiotropium 2.5 micrograms per puff. " + NOTE_SUFFIX,
+        alternatives: [
+          {
+            name: "Spiriva 18 micrograms inhalation powder plus HandiHaler device (DPI)",
+            why: "Lower-GHG LAMA option in the same product family.",
+            estComparison: "0.28 kg CO2e/inhaler vs 0.78 kg CO2e/inhaler (PrescQIPP v2.38)."
+          }
+        ],
+        sources: SOURCES_PRESCQIPP
+      },
+      {
+        id: "spiriva_18_micrograms_inhalation_powder_plus_handihaler_device",
+        name: "Spiriva 18 micrograms inhalation powder plus HandiHaler device",
+        deviceType: "DPI",
+        drugClass: "LAMA",
+        propellant: "None",
+        dosesPerInhaler: 30,
+        co2ePerInhalerKg: 0.282,
+        co2ePerDoseG: 9.4,
+        impactBand: "low",
+        notes: "Indication: COPD. Active ingredient(s): tiotropium bromide monohydrate 22.5 micrograms equivalent to 18 micrograms tiotropium. " + NOTE_SUFFIX,
+        alternatives: [],
+        sources: SOURCES_PRESCQIPP
+      },
+      {
+        id: "anoro_ellipta_55_micrograms_22_micrograms_inhalation_powder_pre_dispensed",
+        name: "Anoro Ellipta 55 micrograms/22 micrograms inhalation powder, pre-dispensed",
+        deviceType: "DPI",
+        drugClass: "LABA/LAMA",
+        propellant: "None",
+        dosesPerInhaler: 30,
+        co2ePerInhalerKg: 0.747,
+        co2ePerDoseG: 24.9,
+        impactBand: "low",
+        notes: "Indication: COPD. Active ingredient(s): umeclidinium 55 micrograms and vilanterol 22 micrograms. " + NOTE_SUFFIX,
+        alternatives: [
+          {
+            name: "Duaklir Genuair 340 micrograms/12 micrograms inhalation powder (DPI)",
+            why: "Another low-GHG LABA/LAMA DPI option.",
+            estComparison: "0.55 kg CO2e/inhaler vs 0.75 kg CO2e/inhaler (PrescQIPP v2.38)."
+          }
+        ],
+        sources: SOURCES_PRESCQIPP
+      },
+      {
+        id: "duaklir_genuair_340_micrograms_12_micrograms_inhalation_powder",
+        name: "Duaklir Genuair 340 micrograms/12 micrograms inhalation powder",
+        deviceType: "DPI",
+        drugClass: "LABA/LAMA",
+        propellant: "None",
+        dosesPerInhaler: 60,
+        co2ePerInhalerKg: 0.55,
+        co2ePerDoseG: 9.17,
+        impactBand: "low",
+        notes: "Indication: COPD. Active ingredient(s): aclidinium bromide 322 micrograms and formoterol fumarate 12 micrograms/puff. " + NOTE_SUFFIX,
+        alternatives: [],
+        sources: SOURCES_PRESCQIPP
+      },
+      {
+        id: "bevespi_aerosphere",
+        name: "Bevespi Aerosphere",
+        deviceType: "pMDI",
+        drugClass: "LABA/LAMA",
+        propellant: "HFA-134a",
+        dosesPerInhaler: 120,
+        co2ePerInhalerKg: 15.158,
+        co2ePerDoseG: 126.32,
+        impactBand: "high",
+        notes: "Indication: COPD. Active ingredient(s): formoterol fumarate dihydrate 5 micrograms / glycopyrronium 7.2 micrograms/puff. " + NOTE_SUFFIX,
+        alternatives: [
+          {
+            name: "Anoro Ellipta 55 micrograms/22 micrograms (DPI)",
+            why: "Low-GHG LABA/LAMA DPI option.",
+            estComparison: "0.75 kg CO2e/inhaler vs 15.16 kg CO2e/inhaler (PrescQIPP v2.38)."
+          },
+          {
+            name: "Duaklir Genuair 340 micrograms/12 micrograms (DPI)",
+            why: "Another low-GHG LABA/LAMA DPI option.",
+            estComparison: "0.55 kg CO2e/inhaler vs 15.16 kg CO2e/inhaler (PrescQIPP v2.38)."
+          }
+        ],
+        sources: SOURCES_PRESCQIPP
+      },
+      {
+        id: "trelegy_ellipta_92_micrograms_55_micrograms_22_micrograms_inhalation_powder_pre_dispensed",
+        name: "Trelegy Ellipta 92 micrograms/55 micrograms/22 micrograms inhalation powder, pre-dispensed",
+        deviceType: "DPI",
+        drugClass: "ICS/LABA/LAMA",
+        propellant: "None",
+        dosesPerInhaler: 30,
+        co2ePerInhalerKg: 0.765,
+        co2ePerDoseG: 25.5,
+        impactBand: "low",
+        notes: "Indication: COPD. Active ingredient(s): fluticasone furoate 92 micrograms/ umeclidinium 55 micrograms/ vilanterol 22 micrograms/puff. " + NOTE_SUFFIX,
+        alternatives: [],
+        sources: SOURCES_PRESCQIPP
+      },
+      {
+        id: "trimbow_87_micrograms_5_micrograms_9_micrograms_pressurised_inhalation_solution",
+        name: "Trimbow 87 micrograms/ 5 micrograms/ 9 micrograms pressurised inhalation, solution",
+        deviceType: "pMDI",
+        drugClass: "ICS/LABA/LAMA",
+        propellant: "HFA-134a",
+        dosesPerInhaler: 120,
+        co2ePerInhalerKg: 14.829,
+        co2ePerDoseG: 123.58,
+        impactBand: "high",
+        notes: "Indication: Asthma and COPD. Active ingredient(s): beclometasone 87 micrograms/ formoterol 5 micrograms/ glycopyrronium 9 micrograms/puff. " + NOTE_SUFFIX,
+        alternatives: [
+          {
+            name: "Trimbow NEXThaler (DPI) 88/5/9 micrograms",
+            why: "Same class without propellant.",
+            estComparison: "0.89 kg CO2e/inhaler vs 14.83 kg CO2e/inhaler (PrescQIPP v2.38)."
+          },
+          {
+            name: "Trelegy Ellipta 92/55/22 micrograms (DPI)",
+            why: "Low-GHG triple-therapy DPI option.",
+            estComparison: "0.77 kg CO2e/inhaler vs 14.83 kg CO2e/inhaler (PrescQIPP v2.38)."
+          }
+        ],
+        sources: SOURCES_PRESCQIPP
+      },
+      {
+        id: "trimbow_nexthaler_dpi_88_micrograms_5_micrograms_9_micrograms_per_actuation_inhalation_powder",
+        name: "Trimbow NEXThaler (DPI) 88 micrograms/ 5 micrograms/ 9 micrograms per actuation inhalation powder",
+        deviceType: "DPI",
+        drugClass: "ICS/LABA/LAMA",
+        propellant: "None",
+        dosesPerInhaler: 120,
+        co2ePerInhalerKg: 0.889,
+        co2ePerDoseG: 7.41,
+        impactBand: "low",
+        notes: "Indication: COPD. Active ingredient(s): beclometasone 88 micrograms/ formoterol 5 micrograms/ glycopyrronium 9 micrograms/puff. " + NOTE_SUFFIX,
+        alternatives: [
+          {
+            name: "Trelegy Ellipta 92/55/22 micrograms (DPI)",
+            why: "Comparable low-GHG triple-therapy DPI option.",
+            estComparison: "0.77 kg CO2e/inhaler vs 0.89 kg CO2e/inhaler (PrescQIPP v2.38)."
+          }
+        ],
+        sources: SOURCES_PRESCQIPP
       }
     ];
 
