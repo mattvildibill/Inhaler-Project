@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Inhaler Greenhouse Gas (GHG) Comparison Tool</title>
+    <link rel="stylesheet" href="assets/styles.css" />
+</head>
+<body>
+  <header class="hero">
+    <div class="container">
+      <div class="eyebrow">Climate impact explorer</div>
+      <h1>Inhaler Greenhouse Gas (GHG) Comparison Tool</h1>
+      <p>
+        Select an inhaler to view estimated climate impact and lower-GHG alternatives.
+        Replace placeholder numbers with your preferred data sources.
+      </p>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <div class="controls">
+        <div class="field">
+          <label for="inhalerSelect">Inhaler / Device</label>
+          <select id="inhalerSelect" aria-label="Select inhaler"></select>
+        </div>
+
+        <label class="toggle" for="lowOnly">
+          <input id="lowOnly" type="checkbox" />
+          <span>Show lower-GHG options only</span>
+        </label>
+      </div>
+
+      <div class="helper">
+        Tip: You can structure this by brand, class (SABA/ICS/LABA/LAMA), or device (MDI/DPI/SMI/nebulizer).
+      </div>
+    </section>
+
+    <section class="card" id="detailsCard" hidden>
+      <div class="grid">
+        <div class="col-12 title-row">
+          <h2 id="title"></h2>
+          <div class="subtitle" id="subtitle"></div>
+          <div class="pillrow" id="tags"></div>
+        </div>
+
+        <div class="col-6">
+          <div class="metric">
+            <div class="k">Estimated CO&#8322;e per inhaler (lifecycle)</div>
+            <div class="v" id="co2ePerInhaler">—</div>
+          </div>
+        </div>
+
+        <div class="col-6">
+          <div class="metric">
+            <div class="k">Estimated CO&#8322;e per dose</div>
+            <div class="v" id="co2ePerDose">—</div>
+          </div>
+        </div>
+
+        <div class="col-12">
+          <div class="metric">
+            <div class="k">Notes (assumptions, propellant, etc.)</div>
+            <div class="small" id="notes">—</div>
+          </div>
+        </div>
+
+        <div class="col-12">
+          <div class="metric">
+            <div class="k">Lower-GHG alternatives (similar therapeutic intent)</div>
+            <ul id="alternatives"></ul>
+            <div class="small muted" id="altFootnote"></div>
+          </div>
+        </div>
+
+        <div class="col-12">
+          <div class="small">
+            <strong>Important:</strong> Clinical appropriateness comes first. Switching devices can affect
+            technique, inspiratory flow requirements, adherence, and outcomes. Consider shared decision-making,
+            training, and formulary access.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="small">
+        <strong>How to update data:</strong> In the script at the bottom, edit the <code>INHALERS</code> array.
+        Use consistent units (e.g., kg CO&#8322;e per inhaler; g CO&#8322;e per dose). Add citations in <code>sources</code>.
+      </div>
+    </section>
+  </main>
+
+  <div class="footer">
+    This tool is for informational use. Populate it with values from your chosen sources and institutional policies.
+  </div>
+
+    <script src="assets/app.js"></script>
+</body>
+</html>
